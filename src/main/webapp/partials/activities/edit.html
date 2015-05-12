@@ -1,0 +1,57 @@
+<div class="page-header">
+	<h3>Edit Activity</h3>
+</div>
+
+<form class="form-horizontal" ng-controller="ActivityCtrl">
+	<div class="form-group">
+		<label class="control-label col-sm-2" for="code">Activity Code</label>
+		<div class="col-sm-10">
+			<input type="text" ng-model="activity.code" id="code" class="form-control">
+		</div>
+		
+		<label class="control-label col-sm-2" for="imageUrl">Image Url</label>
+		<div class="col-sm-10">
+			<input type="text" ng-model="activity.imageUrl" id="imageUrl" class="form-control">
+		</div>
+		
+		<label class="control-label col-sm-2" for="text">Text to Show</label>
+		<div class="col-sm-10">
+			<input type="text" ng-model="activity.text" id="text" class="form-control">
+		</div>
+		
+		<label class="control-label col-sm-2" for="activityType">Activity Type</label>
+		<div class="col-sm-10">
+			<input type="text" ng-model="activity.activityType" id="activityType" class="form-control">
+		</div>
+	</div>
+	
+	<div class="panel panel-default">
+		<div class="panel-body">
+		    <form class="form-inline">
+		        <table datatable="ng" dt-options="ActivityCtrl.dtOptions" dt-column-defs="ActivityCtrl.dtColumnDefs" class="row-border hover">
+		            <thead>
+		            <tr>
+		                <th>Major</th>
+		                <th>Minor</th>
+		                <th>UUID</th>
+		            </tr>
+		            </thead>
+		            <tbody>
+		            <tr ng-repeat="beacon in ActivityCtrl.beacons">
+		                <td>{{ beacon.major }}</td>
+		                <td>{{ beacon.minor }}</td>
+		                <td>{{ beacon.uuid }}</td>
+		            </tr>
+		            </tbody>
+		        </table>
+		    </form>
+		</div>
+	</div>
+	
+	
+	<div class="form-group">
+		<div class="col-sm-10 col-sm-offset-2">
+			<button type="submit" class="btn btn-primary" ng-click="save()"><span class="glyphicon glyphicon-ok"></span> Save</button>
+		</div>
+	</div>
+</form>

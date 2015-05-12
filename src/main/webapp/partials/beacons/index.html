@@ -1,0 +1,388 @@
+<div ng-controller="BeaconCtrl">
+	
+	<div class="pull-right">
+		<!--a href="#!/beacons/create" class="btn btn-default" ng-show="hasRole('admin')" title="Create"><span class="glyphicon glyphicon-plus"></span></a-->
+	</div>
+	<div class="page-header">
+		<h3>Beacons</h3>
+	</div>
+
+<section>
+        <ul class="nav nav-tabs">
+            <li ng-class="{active:isSet(1)}"><a href ng-click="setTab(1)">Pesquisa</a></li>
+            <li ng-class="{active:isSet(2)}"><a href ng-click="setTab(2)">Detalhes</a></li>
+            <li ng-class="{active:isSet(3)}"><a href ng-click="setTab(3)">Novo</a></li>
+        </ul>
+        
+        <div ng-show="isSet(1)">
+        
+	<!-- SEARCH DATA TABLE -->
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<button type="submit" class="btn btn-default" ng-click="createBeacon()">
+						<span class="glyphicon glyphicon-plus"></span>
+					</button>
+					<button type="submit" class="btn btn-default" ng-click="editFromSearch()">
+						<span class="glyphicon glyphicon-pencil"></span>
+					</button>
+					<button type="submit" class="btn btn-default" ng-click="deleteBeacon(selectedBeacon)" ng-disabled="selectedBeacon==null">
+						<span class="glyphicon glyphicon-trash"></span>
+					</button>
+				</div>
+				<div class="panel-body">
+					<div class="alert alert-warning" ng-show="showDeleteSuccess">Beacon excluído com sucesso!</div>
+					<form class="form-inline">
+						<table id="beacon_dataTable_search" datatable="ng" dt-options="dtOptions"
+							dt-column-defs="dtColumnDefs" class="display table table-striped table-bordered row-border hover">
+							<thead>
+								<tr>
+									<th></th>
+									<th>Beacon</th>
+									<th>Descrição</th>
+									<th>Local</th>
+									<th ng-show="hasRole('admin')">Major</th>
+									<th ng-show="hasRole('admin')">Minor</th>
+									<th ng-show="hasRole('admin')">Uuid</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr class="noselect" ng-repeat="beacon in beacons" ng-click="selectBeacon(beacon)" ng-dblclick="selectFromSearch()" style="cursor: pointer;">
+									<td><input type="radio" ng-checked="selectedBeacon.idBeacon === beacon.idBeacon"></td>
+									<td>{{ beacon.name }}</td>
+									<td>{{ beacon.description }}</td>
+									<td>{{ beacon.locale }}</td>
+									<td ng-show="hasRole('admin')">{{ beacon.major }}</td>
+									<td ng-show="hasRole('admin')">{{ beacon.minor }}</td>
+									<td ng-show="hasRole('admin')">{{ beacon.uuid }}</td>
+								</tr>
+							</tbody>
+						</table>
+					</form>
+				</div>
+			</div>
+	<!-- END SEARCH DATA TABLE -->
+        </div>
+        
+        <div ng-show="isSet(2)">
+	<!-- EDIT SCREEN -->
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title">
+						<button type="submit" class="btn btn-default" ng-click="save(selectedBeacon)" ng-disabled="viewMode">
+							<span class="glyphicon glyphicon-floppy-disk"></span>
+						</button>
+						<button type="submit" class="btn btn-default" ng-click="edit()" ng-disabled="editMode">
+							<span class="glyphicon glyphicon-pencil"></span>
+						</button>
+						<button type="submit" class="btn btn-default" ng-click="deleteBeacon(selectedBeacon)">
+							<span class="glyphicon glyphicon-trash"></span>
+						</button>
+					</h3>
+				</div>
+				<div class="panel-body">
+					<div class="alert alert-success alert-dismissible" ng-show="showSuccess">
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						Beacon salvo com sucesso!
+					</div>
+					<div class="alert alert-danger" ng-show="selectedBeacon == null">Selecione um Beacon na aba de Pesquisa!</div>
+					<form role="form" ng-show="selectedBeacon">
+						<!-- UUID -->
+						<div class="form-group row">
+							<div class="col-md-8">
+								<label class="control-label col-sm-5" for="uuid">UUID</label> 
+								<input type="text" ng-model="selectedBeacon.uuid" id="uuid"
+									class="form-control" ng-disabled="viewMode">
+							</div>
+						</div>
+		
+						<!-- MAJOR AND MINOR -->
+						<div class="form-group row">
+							<div class="col-xs-4">
+								<label class="control-label col-sm-5" for="major">Major ID</label>
+								<input type="text" ng-model="selectedBeacon.major" id="major"
+									class="form-control" ng-disabled="viewMode">
+							</div>
+							<div class="col-md-4">
+								<label class="control-label col-sm-5" for="minor">Minor ID</label>
+								<input type="text" ng-model="selectedBeacon.minor" id="minor"
+									class="form-control" ng-disabled="viewMode">
+							</div>
+						</div>
+		
+						<!-- NAME AND LOCAL -->
+						<div class="form-group row">
+							<div class="col-xs-4">
+								<label class="control-label col-sm-5" for="name">Nome</label> 
+								<input type="text" ng-model="selectedBeacon.name" id="major"
+									class="form-control" ng-disabled="viewMode">
+							</div>
+							<div class="col-md-4">
+								<label class="control-label col-sm-5" for="locale">Local</label> <input
+									type="text" ng-model="selectedBeacon.locale" id="locale"
+									class="form-control" ng-disabled="viewMode">
+							</div>
+						</div>
+		
+						<!-- DESCRIPTION -->
+						<div class="form-group row">
+							<div class="col-md-8">
+								<label class="control-label col-sm-5" for="description">Descrição</label>
+								<input type="text" ng-model="selectedBeacon.description"
+									id="description" class="form-control" ng-disabled="viewMode">
+							</div>
+						</div>
+						
+						
+						<div id="ActivityData_id">
+							<div class="page-header">
+								<h4>Exibir</h4>
+							</div>
+							
+							<!-- ACTIVITY TEXT -->
+							<div class="form-group row">
+								<div class="col-md-8">
+									<label class="control-label col-sm-5" for="text">Texto a ser Exibido</label>
+									<input type="text" ng-model="selectedBeacon.activityData.text"
+										id="text" class="form-control" ng-disabled="viewMode">
+								</div>
+							</div>
+							
+							<!-- ACTIVITY CODE -->
+							<div class="form-group row">
+								<div class="col-md-4">
+									<input type="text" ng-model="selectedBeacon.activityData.imageUrl" class="form-control">
+								</div>
+							</div>
+						</div>
+
+					</form>
+				</div>
+			</div>
+	<!-- END EDIT SCREEN -->
+        </div>
+        
+        
+        <div ng-show="isSet(3)">
+
+	<!-- NEW SCREEN -->
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title">
+						<button type="submit" class="btn btn-default" ng-click="save(newBeacon)">
+							<span class="glyphicon glyphicon-floppy-disk"></span>
+						</button>
+						<button type="submit" class="btn btn-default" ng-click="cancel()">
+							<span class="glyphicon glyphicon-erase"></span>
+						</button>
+					</h3>
+				</div>
+				
+				<div class="panel-body">
+					<form role="form">
+						<!-- UUID -->
+						<div class="form-group row">
+							<div class="col-md-8">
+								<label class="control-label col-sm-5" for="uuid">UUID*</label> 
+								<input type="text" ng-model="newBeacon.uuid" id="uuid"
+									class="form-control" required>
+							</div>
+						</div>
+		
+						<!-- MAJOR AND MINOR -->
+						<div class="form-group row">
+							<div class="col-xs-4">
+								<label class="control-label col-sm-5" for="major">Major ID</label>
+								<input type="text" ng-model="newBeacon.major" id="major"
+									class="form-control">
+							</div>
+							<div class="col-md-4">
+								<label class="control-label col-sm-5" for="minor">Minor ID</label>
+								<input type="text" ng-model="newBeacon.minor" id="minor"
+									class="form-control">
+							</div>
+						</div>
+		
+						<!-- NAME AND LOCAL -->
+						<div class="form-group row">
+							<div class="col-xs-4">
+								<label class="control-label col-sm-5" for="name">Nome</label> 
+								<input type="text" ng-model="newBeacon.name" id="major"
+									class="form-control">
+							</div>
+							<div class="col-md-4">
+								<label class="control-label col-sm-5" for="locale">Local</label> <input
+									type="text" ng-model="newBeacon.locale" id="locale"
+									class="form-control">
+							</div>
+						</div>
+		
+						<!-- DESCRIPTION -->
+						<div class="form-group row">
+							<div class="col-md-8">
+								<label class="control-label col-sm-5" for="description">Descrição</label>
+								<input type="text" ng-model="newBeacon.description"
+									id="description" class="form-control">
+							</div>
+						</div>
+						
+						<div id="ActivityData_id">
+							<div class="page-header">
+								<h4>Exibir</h4>
+							</div>
+							
+							<!-- ACTIVITY TEXT -->
+							<div class="form-group row">
+								<div class="col-md-8">
+									<label class="control-label col-sm-5" for="text">Texto a ser Exibido</label>
+									<input type="text" ng-model="newBeacon.activityData.text"
+										id="text" class="form-control" ng-disabled="viewMode">
+								</div>
+							</div>
+							
+							<!-- cropped image 
+							<div ng-style="sectionStyles" class="image-crop-section-final" ng-show="imageCropStep==3">
+								<img class="image-crop-final" ng-src="{{ croppedDataUri }}" />
+							</div>
+							
+							<!-- cropper 
+							<div class="form-group row">
+								<div >
+							      <h3>Result:</h3>
+							      <img ng-src="{{imageUri}}">
+							    </div>
+
+								<p ng-hide="newBeacon.activityData.imageUrl">Not cropped yet</p>
+
+							</div>-->
+							<!-- /cropper -->
+							<!-- ACTIVITY CODE 
+							<div class="form-group row">
+								<div class="col-md-4">
+									<label class="control-label col-sm-5" for="img">Imagem</label>
+									<input type="text" ng-model="newBeacon.activityData.imageUrl"
+										id="img" class="form-control" ng-disabled="viewMode">
+								</div>
+							</div>-->
+						</div>
+						
+					</form>
+				</div>
+			</div>
+	<!-- END NEW SCREEN -->
+        </div>
+</section>
+
+<!--div id="image_cropper_beacon" class="beaconModal">
+	<button ng-click="toggleModalCrop()" class="btn btn-default">
+		<span class="glyphicon glyphicon-plus"></span>
+	</button>
+
+	<modal title="Beacons" visible="showModalCrop">
+	<form role="form">
+		<div class="form-group">
+			<div class="panel panel-default">
+				<div class="panel-body">
+				    <div>
+				      <h3>First, choose a file</h3>
+				      <input type="file" simple-change="fileChanged($event)" accept="image/*">
+				    </div>
+						    
+				    <div>
+				      <h3>Then, crop it</h3>
+				      <canvas class="cropper" width="300" height="300" tw-cropper="cropper" source="file"></canvas>
+				    </div>
+				    
+				    <div ng-show="file">
+				      <button type="button" ng-click="imageUri = cropper.toDataURL();ok(imageUri)" 
+				      	data-dismiss="modal" class="btn btn-primary" >Salvar</button>
+				    </div>
+
+					<button type="button" class="btn btn-default" data-dismiss="modal"
+						aria-hidden="false">Cancelar</button>
+				</div>
+			</div>
+		</div>
+
+		<button type="button" ng-show="selectedBeacon"
+			class="btn btn-primary" ng-click="ok()">OK</button>
+		<button type="button" ng-show="selectedBeacon"
+			class="btn btn-default" ng-click="clear()">Limpar</button>
+		<button type="button" class="btn btn-default" data-dismiss="modal"
+			aria-hidden="true">Cancelar</button>
+	</form>
+	</modal>
+</div-->
+
+	<!-- MODAL TO EDIT AND CREATE BEACON
+	<div class="beaconModal">
+		<button ng-click="toggleModal()" class="btn btn-default">
+			<span class="glyphicon glyphicon-plus"></span>
+		</button>
+
+		<modal title="Beacons" visible="showModal">
+		<form role="form">
+			<div class="form-group">
+				
+				<div class="panel panel-default">
+					<div class="panel-body">
+						<div>
+							<form class="form-inline" ng-submit="addBeacon()">
+								<table datatable="ng" dt-options="dtOptions"
+									dt-column-defs="dtColumnDefs"
+									class="row-border hover table-bordered">
+									<thead>
+										<tr>
+											<th>Major</th>
+											<th>Minor</th>
+											<th>UUID</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr class="selectionRow" ng-repeat="beacon in beacons"
+											ng-click="selectBeacon(beacon)">
+											<td>{{ beacon.major }}</td>
+											<td>{{ beacon.minor }}</td>
+											<td>{{ beacon.uuid }}</td>
+										</tr>
+									</tbody>
+								</table>
+							</form>
+						</div>
+					</div>
+				</div>
+				
+			</div>
+
+			<div ng-show="selectedBeacon">
+				<label for="tableSelectedBeacon">Beacon Selecionado</label>
+				<table id="tableSelectedBeacon"
+					class="row-border hover table table-bordered">
+					<thead>
+						<tr>
+							<th>Major</th>
+							<th>Minor</th>
+							<th>UUID</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>{{ selectedBeacon.major }}</td>
+							<td>{{ selectedBeacon.minor }}</td>
+							<td>{{ selectedBeacon.uuid }}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<button type="button" ng-show="selectedBeacon"
+				class="btn btn-primary" ng-click="ok()">OK</button>
+			<button type="button" ng-show="selectedBeacon"
+				class="btn btn-default" ng-click="clear()">Limpar</button>
+			<button type="button" class="btn btn-default" data-dismiss="modal"
+				aria-hidden="true">Cancelar</button>
+		</form>
+		</modal>
+	</div>
+	<!-- END MODAL -->
+
+</div>
+<hr />

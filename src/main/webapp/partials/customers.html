@@ -1,0 +1,18 @@
+<div class="pull-right">
+	<a href="#!/create" class="btn btn-default" ng-show="hasRole('admin')" title="Create"><span class="glyphicon glyphicon-plus"></span></a>
+</div>
+<div class="page-header">
+	<h3>Customers</h3>
+</div>
+
+<div ng-repeat="customer in customers">
+	<hr />
+	<div class="pull-right">
+		<a href="" ng-click="deleteEntry(newsEntry)" class="btn btn-xs btn-default" ng-show="hasRole('admin')" title="delete"><span class="glyphicon glyphicon-trash"></span></a>
+		<a href="#!/edit/{{newsEntry.id}}" class="btn btn-xs btn-default" ng-show="hasRole('admin')" title="edit"><span class="glyphicon glyphicon-pencil"></span></a>
+	</div>
+	<h4>{{customer.login}}</h4>
+	<p>{{customer.name}}</p>
+	<p>{{customer.password}}</p>
+</div>
+<hr />

@@ -1,0 +1,37 @@
+<!-- SEARCH DATA TABLE -->
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h3 class="panel-title">
+				<span class="glyphicon glyphicon-search"></span>
+			</h3>
+		</div>
+		<div class="panel-body">
+			<form class="form-inline">
+				<table datatable="ng" dt-options="dtOptions"
+					dt-column-defs="dtColumnDefs"
+					class="table table-striped table-bordered row-border hover">
+					<thead>
+						<tr>
+							<th>Beacon</th>
+							<th>Descrição</th>
+							<th>Local</th>
+							<th ng-show="hasRole('admin')">Major</th>
+							<th ng-show="hasRole('admin')">Minor</th>
+							<th ng-show="hasRole('admin')">Uuid</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="beacon in beacons" ng-click="selectBeacon(beacon)">
+							<td>{{ beacon.name }}</td>
+							<td>{{ beacon.description }}</td>
+							<td>{{ beacon.locale }}</td>
+							<td ng-show="hasRole('admin')">{{ beacon.major }}</td>
+							<td ng-show="hasRole('admin')">{{ beacon.minor }}</td>
+							<td ng-show="hasRole('admin')">{{ beacon.uuid }}</td>
+						</tr>
+					</tbody>
+				</table>
+			</form>
+		</div>
+	</div>
+<!-- END SEARCH DATA TABLE -->

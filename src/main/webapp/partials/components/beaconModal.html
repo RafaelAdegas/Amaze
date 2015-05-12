@@ -1,0 +1,60 @@
+<div ng-controller="AngularWayChangeDataCtrl as showCase" class="container">
+  <h1>Beacons</h1>
+  <button ng-click="toggleModal()" class="btn btn-default"><span class="glyphicon glyphicon-plus"></span></button>
+    
+  <modal title="Beacons" visible="showModal">
+    <form role="form">
+      <div class="form-group">
+<!-- DATA TABLE -->      	
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<div>
+				    <form class="form-inline" ng-submit="showCase.addBeacon()">
+				        <table datatable="ng" dt-options="showCase.dtOptions" dt-column-defs="showCase.dtColumnDefs" class="row-border hover table-bordered">
+				            <thead>
+				            <tr>
+				                <th>Major</th>
+				                <th>Minor</th>
+				                <th>UUID</th>
+				            </tr>
+				            </thead>
+				            <tbody>
+				            <tr class="selectionRow" ng-repeat="beacon in showCase.beacons" ng-click="selectBeacon(beacon)">
+				                <td>{{ beacon.major }}</td>
+				                <td>{{ beacon.minor }}</td>
+				                <td>{{ beacon.uuid }}</td>
+				            </tr>
+				            </tbody>
+				        </table>
+				    </form>
+				</div>
+			</div>
+		</div>
+<!-- FIM DATA TABLE -->
+      </div>
+
+	<div ng-show="selectedBeacon">
+	  <label for="tableSelectedBeacon">Beacon Selecionado</label>
+      <table id="tableSelectedBeacon" class="row-border hover table table-bordered">
+        <thead>
+	        <tr>
+	            <th>Major</th>
+	            <th>Minor</th>
+	            <th>UUID</th>
+	        </tr>
+        </thead>
+        <tbody>
+	        <tr>
+	            <td>{{ selectedBeacon.major }}</td>
+	            <td>{{ selectedBeacon.minor }}</td>
+	            <td>{{ selectedBeacon.uuid }}</td>
+	        </tr>
+        </tbody>
+      </table>
+    </div>
+      <button type="button" ng-show="selectedBeacon" class="btn btn-primary" ng-click="ok()">OK</button>
+      <button type="button" ng-show="selectedBeacon" class="btn btn-default" ng-click="clear()">Limpar</button>
+      <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
+    </form>
+  </modal>
+</div>

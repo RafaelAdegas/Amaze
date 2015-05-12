@@ -1,0 +1,21 @@
+<div class="pull-right">
+	<a href="#!/activities/create" class="btn btn-default" ng-show="hasRole('admin')" title="Create"><span class="glyphicon glyphicon-plus"></span></a>
+</div>
+<div class="page-header">
+	<h3>Interações</h3>
+</div>
+
+	
+
+<div ng-repeat="activity in activities">
+	<hr />
+	<div class="pull-right">
+		<a href="#!/activities" ng-click="deleteAct(activity)" class="btn btn-xs btn-default" ng-show="hasRole('admin')" title="delete"><span class="glyphicon glyphicon-trash"></span></a>
+		<a href="#!/activities/edit/{{activity.idActivityData}}" class="btn btn-xs btn-default" ng-show="hasRole('admin')" title="edit"><span class="glyphicon glyphicon-pencil"></span></a>
+	</div>
+	<h4>Code 	{{activity.code}}</h4>
+	<p>Text 	{{activity.text}}</p>
+	<p>Type 	{{activity.activityType}}</p>
+	<p>Image Url {{activity.imageUrl}}</p>
+</div>
+<hr />

@@ -1,0 +1,30 @@
+<div class="pull-right">
+	<a href="#!/establishment/create" class="btn btn-default" ng-hide="!hasRole('user') || (!establishments.length == 0)" title="Create"><span class="glyphicon glyphicon-plus"></span></a>
+</div>
+<div class="page-header">
+	<h3>Estabelecimento</h3>
+</div>
+
+<div class="container">
+  <div class="row" id="exSelects">
+    <div class="col-sm-6">
+      <h4>Establishment List</h4>
+      <select id="selectedEstablishment" class="form-control">
+        <option ng-repeat="establishment in establishments" ng-model="establishment.shortName">{{establishment.shortName}}</option>
+      </select>
+    </div><!--/col-->
+  </div><!--/row-->
+</div>
+
+<div ng-repeat="establishment in establishments">
+	<hr />
+	<div class="pull-right">
+		<a href="#!/establishment" ng-click="" class="btn btn-xs btn-default" ng-hide="true" title="delete"><span class="glyphicon glyphicon-trash"></span></a>
+		<a href="#!/establishment/edit/{{establishment.idEstablishment}}" class="btn btn-xs btn-default" ng-show="hasRole('admin')" title="edit"><span class="glyphicon glyphicon-pencil"></span></a>
+	</div>
+	<h4>{{establishment.code}}</h4>
+	<p>{{establishment.formalName}}</p>
+	<p>{{establishment.longName}}</p>
+	<p>{{establishment.shortName}}</p>
+</div>
+<hr />
