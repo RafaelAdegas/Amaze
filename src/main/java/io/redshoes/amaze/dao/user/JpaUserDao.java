@@ -2,6 +2,7 @@ package io.redshoes.amaze.dao.user;
 
 import java.util.List;
 
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -9,6 +10,7 @@ import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Root;
 
 import io.redshoes.amaze.dao.JpaDao;
+import io.redshoes.amaze.entity.Establishment;
 import io.redshoes.amaze.entity.User;
 
 import org.springframework.security.core.userdetails.UserDetails;
@@ -57,6 +59,16 @@ public class JpaUserDao extends JpaDao<User, Long> implements UserDao
 		}
 
 		return users.iterator().next();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	@Transactional(readOnly = true)
+	public List<User> findAllFromEstablishment(Establishment establishment) {
+		
+		Query query = this.getEntityManager().createQuery("select u from User u where u.establishment = :establishment").setParameter("establishment", establishment);
+
+		return (List<User>)query.getResultList();
 	}
 
 }

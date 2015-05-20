@@ -11,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.map.annotate.JsonView;
@@ -44,6 +45,9 @@ public class ActivityData implements Entity {
 	
 	@OneToMany(mappedBy="activityData")
 	private List<Beacon> beaconCollection;
+	
+	@Transient
+	private String imageDataURI;
 
 	public ActivityData() {
 	}
@@ -115,7 +119,15 @@ public class ActivityData implements Entity {
 		beacon.setActivityData(null);
 		return beacon;
 	}
-
+	
+	public String getImageDataURI() {
+		return imageDataURI;
+	}
+	
+	public void setImageDataURI(String imageDataURI) {
+		this.imageDataURI = imageDataURI;
+	}
+	
 	@Override
 	public String toString()
 	{

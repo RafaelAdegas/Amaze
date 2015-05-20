@@ -1,5 +1,10 @@
 body {
 	padding-top: 60px;
+	width: 993px;
+}
+
+.fixed-body {
+	width: 920px;
 }
 
 ng-hide {
@@ -72,4 +77,50 @@ ng-hide {
     background: white;
     cursor: inherit;
     display: block;
+}
+
+.btn-image {
+	margin-bottom: 10px;
+}
+
+.panel-center {
+	text-align: center;
+}
+.list-group-item.cropArea {
+	padding-top: 25px;
+	padding-left: 25px;
+	padding-right: 25px;
+}
+.list-group-item.croppedArea {
+	padding-top: 25px;
+	padding-bottom: 25px;
+	padding-left: 25px;
+	padding-right: 25px;
+}
+.panel-center-crop {
+	text-align: center;
+	padding-left: 10px;
+}
+#ActivityData_id .well {
+	width: 855px;
+}
+.cropArea {
+  overflow: hidden;
+  height:350px;
+}
+
+.images-cropper {
+	display: -webkit-box;
+}
+
+.first, .previous, .current, .next {
+	margin-right: 5px;
+}
+
+.no-border-left {
+	border-left: none;
+}
+
+.masterdata-section {
+	display: -webkit-inline-box;
 }

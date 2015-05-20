@@ -1,20 +1,24 @@
-var mymodal = angular.module('beaconCtrl', ['datatables']); /**''*/
+var beaconCtrl = angular.module('beaconCtrl', ['datatables','ngImgCrop']);
 /* BEACON CONTROLLERS */
-mymodal.controller('BeaconCtrl', function (DTOptionsBuilder, 
+beaconCtrl.controller('BeaconCtrl', function (DTOptionsBuilder, 
 											DTColumnDefBuilder,
 											BeaconService, 
 											ActivityService,
+											fileUpload,
 											$scope,
+											$http,
 											$location) {
+	$scope.fileSelected = false;
+	$scope.croppingImage = true;
+
+	$scope.setFile = function(element) {
+        $scope.$apply(function($scope) {
+            $scope.theFile = element.files[0];
+        });
+    };
 	
-/*
-    $scope.imageCropResult = null;
-    $scope.showImageCropper = true;
-    $scope.imageUri = null;*/
 
 	/* initialize entity's */
-		$scope.newBeacon = new BeaconService();
-		$scope.newBeacon.activityData = new ActivityService();
 		$scope.beacons = BeaconService.query();
 	/* end */
 		
@@ -37,51 +41,40 @@ mymodal.controller('BeaconCtrl', function (DTOptionsBuilder,
     /* function selectBeacon with parameter */
 	    $scope.selectBeacon = function(beacon) {
 	    	$scope.showSuccess = false;
-	    	$scope.selectedBeacon = beacon;
-	    	$scope.viewMode = true;
-	    	$scope.editMode = false;
+	    	$scope.newBeacon = beacon;
+	    	$scope.disable = true;
 	    };
 	/* end */
-    
-    /** Buttons functions in Details tab **/
-	$scope.edit = function() {
-		$scope.viewMode = false;
-		$scope.editMode = true;
-	};
 	
     /** Buttons functions in First tab **/
 	$scope.editFromSearch = function() {
 		$scope.setTab(2);
-		$scope.viewMode = false;
-		$scope.editMode = true;
 	};
-	$scope.selectFromSearch = function() {
+	$scope.selectFromSearch = function(beacon) {
 		$scope.setTab(2);
-		$scope.editMode = false;
+		$scope.newBeacon = beacon;
 	}
 	
 	$scope.searchBeacons = function() {
 		$scope.beacons = BeaconService.query();
 	}
 	
-	$scope.save = function(newBeacon) {
-		newBeacon.$save(function() {
+	$scope.save = function() {
+		$scope.newBeacon.activityData.imageDataURI = $scope.myCroppedImage;
+		$scope.newBeacon = $scope.newBeacon.$save(function(){
 			$scope.showSuccess = true;
-			$scope.viewMode = true;
-			$scope.editMode = false;
+			$scope.beacons.push(newBeacon);
 			$scope.selectedBeacon = newBeacon;
 			$scope.setTab(2);
-			$scope.newBeacon = new BeaconService();
+			$scope.disable = true;
 		});
 	};
 	
 	$scope.createBeacon = function() {
-		$scope.setTab(3);
-	}
-	
-	$scope.cancel = function() {
+		$scope.setTab(2);
 		$scope.newBeacon = new BeaconService();
-		$scope.setTab(1);
+		$scope.newBeacon.activityData = new ActivityService();
+		$scope.disable = false;
 	}
 	
     $scope.dtOptions = DTOptionsBuilder.newOptions().withPaginationType('full_numbers');
@@ -90,6 +83,7 @@ mymodal.controller('BeaconCtrl', function (DTOptionsBuilder,
         DTColumnDefBuilder.newColumnDef(1),
         DTColumnDefBuilder.newColumnDef(2)
     ];
+    
     
     
     
@@ -108,13 +102,21 @@ mymodal.controller('BeaconCtrl', function (DTOptionsBuilder,
         $scope.showModal = !$scope.showModal;
     };
     
+    $scope.myImage='';
+    $scope.myCroppedImage='';
 
-    $scope.ok = function(imageUri){
-    	$scope.newBeacon.activityData.imageUrl = imageUri;
-    	$scope.selectedBeacon.activityData.imageUrl = imageUri;
-    	$scope.imageUri = null;
-    }
-
+    var handleFileSelect=function(evt) {
+      var file=evt.currentTarget.files[0];
+      var reader = new FileReader();
+      reader.onload = function (evt) {
+        $scope.$apply(function($scope){
+          $scope.myImage=evt.target.result;
+        });
+      };
+      reader.readAsDataURL(file);
+    };
+    angular.element(document.querySelector('#fileInput')).on('change',handleFileSelect);
+    
     
     
     
@@ -122,7 +124,7 @@ mymodal.controller('BeaconCtrl', function (DTOptionsBuilder,
 /* FIM BEACON CONTROLLERS */
 
 /* click directive */
-mymodal.directive('sglclick', ['$parse', function($parse) {
+beaconCtrl.directive('sglclick', ['$parse', function($parse) {
     return {
         restrict: 'A',
         link: function(scope, element, attr) {
@@ -147,7 +149,7 @@ mymodal.directive('sglclick', ['$parse', function($parse) {
 }]);
 
 /* modal directive*/
-mymodal.directive('modal', function () {
+beaconCtrl.directive('modal', function () {
     return {
       template: '<div class="modal fade">' + 
           '<div class="modal-dialog modal-lg">' + 

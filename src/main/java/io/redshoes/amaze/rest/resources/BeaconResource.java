@@ -1,8 +1,13 @@
 package io.redshoes.amaze.rest.resources;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
+import javax.imageio.ImageIO;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -17,6 +22,7 @@ import io.redshoes.amaze.JsonViews;
 import io.redshoes.amaze.dao.activitydata.ActivityDataDao;
 import io.redshoes.amaze.dao.beacon.BeaconDao;
 import io.redshoes.amaze.dao.user.UserDao;
+import io.redshoes.amaze.entity.ActivityData;
 import io.redshoes.amaze.entity.Beacon;
 
 import org.codehaus.jackson.JsonGenerationException;
@@ -26,7 +32,9 @@ import org.codehaus.jackson.map.ObjectWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.codec.Base64;
 import org.springframework.stereotype.Component;
+
 
 
 @Component
@@ -90,12 +98,36 @@ public class BeaconResource extends GenericResource<Beacon>
 
 		beacon.setEstablishment(super.getCurrentEstablishment());
 		
-		beacon.getActivityData().setImageUrl(super.saveDataUriToFile(beacon.getActivityData().getImageUrl()));
-		System.out.println(beacon.getActivityData().getImageUrl());
-
+		if(!beacon.getActivityData().getImageDataURI().equals("") && beacon.getActivityData().getImageDataURI() != null) {
+			String id = beacon.getUuid() + beacon.getMajor() + beacon.getMinor();
+			beacon.setActivityData(this.saveImageDataURI(beacon.getActivityData(), id));
+		}
+		
 		return this.beaconDao.save(beacon);
 	}
-
+	
+	private ActivityData saveImageDataURI(ActivityData activity, String id) throws IOException {
+			String imageDataBytes = activity.getImageDataURI();
+			String fileName = id+".png";
+			String imageUrl = "images\\" + fileName;
+			String localPath = System.getProperty("catalina.base") + "\\wtpwebapps\\amaze-webapp\\"+imageUrl;
+			
+			imageDataBytes = imageDataBytes.substring(imageDataBytes.indexOf(",") + 1);
+			InputStream stream = new ByteArrayInputStream(Base64.decode(imageDataBytes.getBytes()));
+			BufferedImage imBuff = ImageIO.read(stream);
+			
+			File prev = new File(localPath);
+			if(prev.exists()) {
+				prev.delete();
+			}
+			
+			File file = new File(localPath);
+			ImageIO.write(imBuff, "png", file);
+			
+			activity.setImageUrl(imageUrl);
+			activity.setImageDataURI(null);
+		return activity;
+	}
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
@@ -106,8 +138,12 @@ public class BeaconResource extends GenericResource<Beacon>
 		this.logger.info("update(): " + beacon);
 		
 		beacon.setEstablishment(super.getCurrentEstablishment());
-		beacon.getActivityData().setImageUrl(super.saveDataUriToFile(beacon.getActivityData().getImageUrl()));
-		System.out.println(beacon.getActivityData().getImageUrl());
+		
+		if(!beacon.getActivityData().getImageDataURI().equals("") && beacon.getActivityData().getImageDataURI() != null) {
+			String id = beacon.getUuid() + beacon.getMajor() + beacon.getMinor();
+			
+			beacon.setActivityData(this.saveImageDataURI(beacon.getActivityData(), id));
+		}
 
 		return this.beaconDao.save(beacon);
 	}

@@ -44,8 +44,6 @@
 		<property name="entityManagerFactory" ref="entityManagerFactory" />
 	</bean>
 	
-	<bean id="newsEntryDao" class="io.redshoes.amaze.dao.newsentry.JpaNewsEntryDao"/>
-	
 	<bean id="userDao" class="io.redshoes.amaze.dao.user.JpaUserDao"/>
 		
 	<bean id="activityDataDao" class="io.redshoes.amaze.dao.activitydata.JpaActivityDataDao"/>
@@ -101,12 +99,6 @@
 			authentication-manager-ref="authenticationManager">
 		<security:custom-filter ref="authenticationTokenProcessingFilter" position="FORM_LOGIN_FILTER" />
 		<security:intercept-url pattern="/rest/user/authenticate" access="permitAll" />
-		
-		<!-- NEWS URI's auth -->
-			<security:intercept-url method="GET" pattern="/rest/news/**" access="hasRole('user')" />
-			<security:intercept-url method="PUT" pattern="/rest/news/**" access="hasRole('admin')" />
-			<security:intercept-url method="POST" pattern="/rest/news/**" access="hasRole('admin')" />
-			<security:intercept-url method="DELETE" pattern="/rest/news/**" access="hasRole('admin')" />
 			
 		<!-- ACTIVITY DATA URI's auth -->
 			<security:intercept-url method="GET" pattern="/rest/activitydata/**" access="hasRole('user')" />
@@ -119,7 +111,13 @@
 			<security:intercept-url method="PUT" pattern="/rest/beacons/**" access="hasRole('admin')" />
 			<security:intercept-url method="POST" pattern="/rest/beacons/**" access="hasRole('admin')" />
 			<security:intercept-url method="DELETE" pattern="/rest/beacons/**" access="hasRole('admin')" />
-			
+					
+		<!-- USER URI's auth -->
+			<security:intercept-url method="GET" pattern="/rest/users/**" access="hasRole('admin')" />
+			<security:intercept-url method="PUT" pattern="/rest/users/**" access="hasRole('admin')" />
+			<security:intercept-url method="POST" pattern="/rest/users/**" access="hasRole('admin')" />
+			<security:intercept-url method="DELETE" pattern="/rest/users/**" access="hasRole('admin')" />
+		
 		<!-- CUSTOMER URI's auth -->
 			<security:intercept-url method="GET" pattern="/rest/customers/**" access="hasRole('user')" />
 			<security:intercept-url method="PUT" pattern="/rest/customers/**" access="hasRole('admin')" />
@@ -137,6 +135,10 @@
 			<security:intercept-url method="PUT" pattern="/rest/systemadmin/**" access="hasRole('admin')" />
 			<security:intercept-url method="POST" pattern="/rest/systemadmin/**" access="hasRole('admin')" />
 			<security:intercept-url method="DELETE" pattern="/rest/systemadmin/**" access="hasRole('admin')" />
+			
+		<!-- IMAGE UPLOAD URI's auth -->
+			<security:intercept-url method="POST" pattern="/rest/imageupload/**" access="hasRole('user')" />
+			
 	</security:http>
 
 	<bean id="unauthorizedEntryPoint" class="io.redshoes.amaze.rest.UnauthorizedEntryPoint" />

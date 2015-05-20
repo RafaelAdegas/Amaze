@@ -26,7 +26,7 @@ public class JpaActivityDataDao extends JpaDao<ActivityData, Long> implements Ac
 	@Transactional(readOnly = true)
 	public ActivityData find(Long idActivityData) {
 		
-		Query query = this.getEntityManager().createQuery("select a from ActivityData JOIN FETCH where a.idActivityData = :idActivityData").setParameter("idActivityData", idActivityData);
+		Query query = this.getEntityManager().createQuery("select a from ActivityData a where a.idActivityData = :idActivityData").setParameter("idActivityData", idActivityData);
 
 		return (ActivityData) query.getSingleResult();
 	}

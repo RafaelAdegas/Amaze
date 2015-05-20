@@ -1,22 +1,15 @@
 var app = angular.module('exampleApp', ['ngRoute', 
                                         'ngCookies',
                                         'exampleApp.services',
-                                        'beaconCtrl'
+                                        'exampleApp.directives',
+                                        'beaconCtrl',
+                                        'masterDataCtrl',
+                                        'ngImgCrop'
                                         ]);
 	
 app.config(
 		[ '$routeProvider', '$locationProvider', '$httpProvider', '$compileProvider', '$provide',
 		  function($routeProvider, $locationProvider, $httpProvider, $compileProvider, $provide) {
-				
-				$routeProvider.when('/create', {
-					templateUrl: 'partials/create.html',
-					controller: CreateController
-				});
-				
-				$routeProvider.when('/edit/:id', {
-					templateUrl: 'partials/edit.html',
-					controller: EditController
-				});
 	
 				$routeProvider.when('/login', {
 					templateUrl: 'partials/login.html',
@@ -29,21 +22,13 @@ app.config(
 					controller: 'BeaconCtrl'
 				});
 				/** fim BEACON ROUTE **/
-			/** ACTIVITY DATA ROUTE */
-				$routeProvider.when('/activities', {
-					templateUrl: 'partials/activities/index.html',
-					controller: ActivityController
-				});
 				
-				$routeProvider.when('/activities/edit/:idActivityData', {
-					templateUrl: 'partials/activities/edit.html',
-					controller: ActivityEditController
+				/** MASTER DATA ROUTE **/
+				$routeProvider.when('/masterdata', {
+					templateUrl: 'partials/masterdata/index.html',
+					controller: 'MasterDataCtrl'
 				});
-				
-				$routeProvider.when('/activities/create', {
-					templateUrl: 'partials/activities/create.html',
-					controller: ActivityCreateController
-				});
+				/** fim MASTER DATA ROUTE **/
 				
 			/** CUSTOMER ROUTE **/
 				$routeProvider.when('/customers', {
@@ -70,8 +55,6 @@ app.config(
 			/** fim ESTABLISHMENT ROUTE **/
 			
 				$routeProvider.otherwise({
-					templateUrl: 'partials/index.html',
-					controller: IndexController
 				});
 			
 			$locationProvider.hashPrefix('!');
@@ -159,75 +142,6 @@ app.config(
 		
 		$rootScope.initialized = true;
 	});
-
-
-function IndexController($scope, NewsService) {
-	
-	$scope.newsEntries = NewsService.query();
-	
-	$scope.deleteEntry = function(newsEntry) {
-		newsEntry.$remove(function() {
-			$scope.newsEntries = NewsService.query();
-		});
-	};
-};
-
-function EditController($scope, $routeParams, $location, NewsService) {
-
-	$scope.newsEntry = NewsService.get({id: $routeParams.id});
-	
-	$scope.save = function() {
-		$scope.newsEntry.$save(function() {
-			$location.path('/');
-		});
-	};
-};
-
-function CreateController($scope, $location, NewsService) {
-	
-	$scope.newsEntry = new NewsService();
-	
-	$scope.save = function() {
-		$scope.newsEntry.$save(function() {
-			$location.path('/');
-		});
-	};
-};
-
-/* ACTIVITY DATA */
-	function ActivityController($scope, ActivityService, BeaconService) {
-		
-		$scope.activities = ActivityService.query();
-		
-		$scope.deleteAct = function(activity) {
-			activity.$remove(function() {
-				$scope.activities = ActivityService.query();
-			});
-		};
-	};
-	
-	function ActivityEditController($scope, $routeParams, $location, ActivityService) {
-		
-		$scope.activity = ActivityService.get({idActivityData: $routeParams.idActivityData});
-		
-		$scope.save = function() {
-			$scope.activity.$save(function() {
-				$location.path('/activities');
-			});
-		};
-	};
-
-	function ActivityCreateController($scope, $location, ActivityService) {
-		
-		$scope.activity = new ActivityService();
-		
-		$scope.save = function() {
-			$scope.activity.$save(function() {
-				$location.path('/activities');
-			});
-		};
-	};
-/* FIM ACTIVITY DATA */
 
 /* CUSTOMER CONTROLLERS */
 	function CustomerController($scope, CustomerService) {

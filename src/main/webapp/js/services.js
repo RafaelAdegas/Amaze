@@ -13,14 +13,30 @@ services.factory('UserService', function($resource) {
 		);
 });
 
-services.factory('NewsService', function($resource) {
-	
-	return $resource('rest/news/:id', {id: '@id'});
-});
+services.service('fileUpload', ['$http', function ($http) {
+    this.uploadFileToUrl = function(file, filename, uploadUrl){
+        var fd = new FormData();
+        fd.append('file', file);
+        fd.append('filename', filename);
+        $http.post(uploadUrl, fd, {
+            transformRequest: angular.identity,
+            headers: {'Content-Type': undefined}
+        })
+        .success(function(){
+        })
+        .error(function(){
+        });
+    }
+}]);
 
 services.factory('BeaconService', function($resource) {
 	
 	return $resource('rest/beacons/:idBeacon', {idBeacon: '@idBeacon'});
+});
+
+services.factory('UsersService', function($resource) {
+	
+	return $resource('rest/users/:id', {id: '@id'});
 });
 
 services.factory('CustomerService', function($resource) {
@@ -36,21 +52,4 @@ services.factory('EstablishmentService', function($resource) {
 services.factory('ActivityService', function($resource) {
 	
 	return $resource('rest/activitydata/:idActivityData', {idActivityData: '@idActivityData'});
-});
-
-services.factory('ShareDataService', function() {
-    var myList = [];
-
-    var addList = function(newObj) {
-        myList.push(newObj);
-    }
-
-    var getList = function(){
-        return myList;
-    }
-
-    return {
-        addList: addList,
-        getList: getList
-    };
 });
