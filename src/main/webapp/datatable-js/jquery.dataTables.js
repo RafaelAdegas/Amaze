@@ -10786,7 +10786,7 @@
 				 *      } );
 				 *    } );
 				 */
-				"sFirst": "<<",
+				"sFirst": "<span class='glyphicon glyphicon-fast-backward'></span>",
 	
 	
 				/**
@@ -10809,7 +10809,7 @@
 				 *      } );
 				 *    } );
 				 */
-				"sLast": ">>",
+				"sLast": "<span class='glyphicon glyphicon-fast-forward'></span>",
 	
 	
 				/**
@@ -10832,7 +10832,7 @@
 				 *      } );
 				 *    } );
 				 */
-				"sNext": ">",
+				"sNext": "<span class='glyphicon glyphicon-step-forward'></span>",
 	
 	
 				/**
@@ -10855,7 +10855,7 @@
 				 *      } );
 				 *    } );
 				 */
-				"sPrevious": "<"
+				"sPrevious": "<span class='glyphicon glyphicon-step-backward'></span>"
 			},
 	
 			/**
@@ -13734,7 +13734,7 @@
 		"sFilter": "dataTables_filter",
 		"sInfo": "dataTables_info",
 		"sPaging": "dataTables_paginate paging_", /* Note that the type is postfixed */
-		"sLength": "dataTables_length",
+		/*"sLength": "dataTables_length",*/
 		"sProcessing": "dataTables_processing",
 	
 		/* Sorting */

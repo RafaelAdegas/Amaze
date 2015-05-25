@@ -69,7 +69,7 @@ public class BeaconResource extends GenericResource<Beacon>
 		} else {
 			viewWriter = this.mapper.writerWithView(JsonViews.User.class);
 		}
-		List<Beacon> allBeacons = this.beaconDao.findAllFromEstablishment(super.getCurrentEstablishment());
+		List<Beacon> allBeacons = this.beaconDao.findAllFromEstablishment(super.getCurrentUserAccount().getEstablishment());
 		
 		return viewWriter.writeValueAsString(allBeacons);
 	}
@@ -96,7 +96,7 @@ public class BeaconResource extends GenericResource<Beacon>
 	{
 		this.logger.info("create(): " + beacon);
 
-		beacon.setEstablishment(super.getCurrentEstablishment());
+		beacon.setEstablishment(super.getCurrentUserAccount().getEstablishment());
 		
 		if(!beacon.getActivityData().getImageDataURI().equals("") && beacon.getActivityData().getImageDataURI() != null) {
 			String id = beacon.getUuid() + beacon.getMajor() + beacon.getMinor();
@@ -137,7 +137,7 @@ public class BeaconResource extends GenericResource<Beacon>
 	{
 		this.logger.info("update(): " + beacon);
 		
-		beacon.setEstablishment(super.getCurrentEstablishment());
+		beacon.setEstablishment(super.getCurrentUserAccount().getEstablishment());
 		
 		if(!beacon.getActivityData().getImageDataURI().equals("") && beacon.getActivityData().getImageDataURI() != null) {
 			String id = beacon.getUuid() + beacon.getMajor() + beacon.getMinor();

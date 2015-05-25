@@ -101,7 +101,7 @@ app.config(
 		    }
 	    );
 		   
-		}]).run(function($rootScope, $location, $cookieStore, UserService) {
+		}]).run(function($rootScope, $location, $cookieStore, UserService, AccessService) {
 		
 		/* Reset error when a new view is loaded */
 		$rootScope.$on('$viewContentLoaded', function() {
@@ -121,8 +121,24 @@ app.config(
 			return $rootScope.user.roles[role];
 		};
 		
+		$rootScope.hasPageAccess = function(page) {
+			
+			function searchInArray (str, strArray) {
+				for(var j=0; j<strArray.length; j++) {
+					if(strArray[j].match(str)) return true;
+				}
+				return false;
+			}
+			
+			if ($rootScope.userAccess === undefined) {
+				return false;
+			}
+			return searchInArray(page, $rootScope.userAccess.pages);
+		};
+		
 		$rootScope.logout = function() {
 			delete $rootScope.user;
+			delete $rootScope.userAccess;
 			delete $rootScope.authToken;
 			$cookieStore.remove('authToken');
 			$location.path("/login");
@@ -137,6 +153,9 @@ app.config(
 			UserService.get(function(user) {
 				$rootScope.user = user;
 				$location.path(originalPath);
+			});
+			AccessService.get(function(userAccess) {
+				$rootScope.userAccess = userAccess;
 			});
 		}
 		
@@ -186,7 +205,7 @@ app.config(
 	};
 /* FIM ESTABLISHMENT CONTROLLERS */
 
-	function LoginController($scope, $rootScope, $location, $cookieStore, UserService) {
+	function LoginController($scope, $rootScope, $location, $cookieStore, UserService, AccessService) {
 		
 		$scope.rememberMe = false;
 		
@@ -200,6 +219,9 @@ app.config(
 				UserService.get(function(user) {
 					$rootScope.user = user;
 					$location.path("/");
+				});
+				AccessService.get(function(userAccess) {
+					$rootScope.userAccess = userAccess;
 				});
 			});
 		};

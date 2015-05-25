@@ -117,10 +117,37 @@ ng-hide {
 	margin-right: 5px;
 }
 
-.no-border-left {
-	border-left: none;
+.panel-result {
+	border-top: 1px solid #e7e7e7;
+	width: 850px;
+	margin-left: 10px;
 }
 
 .masterdata-section {
 	display: -webkit-inline-box;
+}
+
+legend.legendStyle {
+	padding-left: 5px;
+	padding-right: 5px;
+}
+fieldset.fsStyle {
+	border: 1px solid #e7e7e7;
+	padding-top: 10px;
+	padding-left: 50px;
+	padding-right: 50px;
+	padding-bottom: 30px;
+	margin: 5px;
+}
+legend.legendStyle {
+	font-size: 100%;
+	color: #555555;
+	background-color: transparent;
+	font-weight: bold;
+	margin-left: -30px;
+}
+
+legend {
+	width: auto;
+	border-bottom: 0px;
 }

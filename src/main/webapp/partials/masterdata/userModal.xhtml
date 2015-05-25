@@ -1,0 +1,56 @@
+
+  <modal title="Beacons" visible="showModal">
+    <form role="form">
+      <div class="form-group">
+<!-- DATA TABLE -->      	
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<div>
+				    <form class="form-inline">
+				        <table datatable="ng" dt-options="dtOptions" dt-column-defs="dtColumnDefs" class="row-border hover table-bordered">
+				            <thead>
+				            <tr>
+				                <th>Major</th>
+				                <th>Minor</th>
+				                <th>UUID</th>
+				            </tr>
+				            </thead>
+				            <tbody>
+				            <tr class="selectionRow" >
+				                <td></td>
+				                <td></td>
+				                <td></td>
+				            </tr>
+				            </tbody>
+				        </table>
+				    </form>
+				</div>
+			</div>
+		</div>
+      </div>
+<!-- FIM DATA TABLE 
+
+	<div ng-show="selectedBeacon">
+	  <label for="tableSelectedBeacon">Beacon Selecionado</label>
+      <table id="tableSelectedBeacon" class="row-border hover table table-bordered">
+        <thead>
+	        <tr>
+	            <th>Major</th>
+	            <th>Minor</th>
+	            <th>UUID</th>
+	        </tr>
+        </thead>
+        <tbody>
+	        <tr>
+	            <td>{{ selectedBeacon.major }}</td>
+	            <td>{{ selectedBeacon.minor }}</td>
+	            <td>{{ selectedBeacon.uuid }}</td>
+	        </tr>
+        </tbody>
+      </table>
+    </div>-->
+      <button type="button" class="btn btn-primary" ng-click="">OK</button>
+      <button type="button" class="btn btn-default" ng-click="">Limpar</button>
+      <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
+    </form>
+  </modal>

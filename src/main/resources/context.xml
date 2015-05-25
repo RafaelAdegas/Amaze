@@ -113,10 +113,10 @@
 			<security:intercept-url method="DELETE" pattern="/rest/beacons/**" access="hasRole('admin')" />
 					
 		<!-- USER URI's auth -->
-			<security:intercept-url method="GET" pattern="/rest/users/**" access="hasRole('admin')" />
-			<security:intercept-url method="PUT" pattern="/rest/users/**" access="hasRole('admin')" />
-			<security:intercept-url method="POST" pattern="/rest/users/**" access="hasRole('admin')" />
-			<security:intercept-url method="DELETE" pattern="/rest/users/**" access="hasRole('admin')" />
+			<security:intercept-url method="GET" pattern="/rest/users/**" access="hasRole('user')" />
+			<security:intercept-url method="PUT" pattern="/rest/users/**" access="hasRole('user')" />
+			<security:intercept-url method="POST" pattern="/rest/users/**" access="hasRole('user')" />
+			<security:intercept-url method="DELETE" pattern="/rest/users/**" access="hasRole('user')" />
 		
 		<!-- CUSTOMER URI's auth -->
 			<security:intercept-url method="GET" pattern="/rest/customers/**" access="hasRole('user')" />

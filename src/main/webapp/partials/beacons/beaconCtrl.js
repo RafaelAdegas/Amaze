@@ -65,7 +65,7 @@ beaconCtrl.controller('BeaconCtrl', function (DTOptionsBuilder,
 			$scope.showSuccess = true;
 			$scope.beacons.push(newBeacon);
 			$scope.selectedBeacon = newBeacon;
-			$scope.setTab(2);
+			$scope.setTab(1);
 			$scope.disable = true;
 		});
 	};

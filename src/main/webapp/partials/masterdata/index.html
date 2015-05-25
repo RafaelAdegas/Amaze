@@ -1,39 +1,69 @@
-<div class="page-header">
-	<h3>Master Data</h3>
-</div>
-
-<div class="masterdata-section">
-	<ul class="nav nav-pills nav-stacked" style="width: 100px; float: left;">
-		<li ng-class="{active:isSet(1)}"><a href ng-click="setTab(1)">Usuarios</a></li>
-		<li ng-class="{active:isSet(2)}"><a href ng-click="setTab(2)">Home 2</a></li>
-		<li ng-class="{active:isSet(3)}"><a href ng-click="setTab(3)">Home 3</a></li>
-		<li ng-class="{active:isSet(4)}"><a href ng-click="setTab(4)">Home 4</a></li>
-		<li ng-class="{active:isSet(5)}"><a href ng-click="setTab(5)">Home 5</a></li>
-	</ul>
+<div data-ng-controller="MasterDataCtrl">
+	<div class="page-header">
+		<h3>Master Data</h3>
+	</div>
 	
-	<div class="panel panel-default no-border-left">
-		<div class="panel-body">
-			<div ng-show="isSet(1)">
-				<table id="users_dataTable_search" datatable="ng" dt-options="dtOptions"
-					dt-column-defs="dtColumnDefs" class="display table table-striped table-bordered row-border hover">
-					<thead>
-						<tr>
-							<th></th>
-							<th>Nome</th>
-							<th ng-show="hasRole('admin')">Senha</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr class="noselect" ng-repeat="user in users" ng-click="selectUser(user)" ng-dblclick="selectFromSearch(user)" style="cursor: pointer;">
-							<td><input type="radio" ng-checked="selectedUser.id === user.id"></td>
-							<td>{{ user.name }}</td>
-							<td>{{ user.password }}</td>
-						</tr>
-					</tbody>
-				</table>
+	<div class="masterdata-section">
+		<ul class="nav nav-pills nav-stacked" style="width: 100px; float: left;">
+			<li ng-class="{active:isSet(1)}"><a href ng-click="setTab(1)">Usuarios</a></li>
+			<li ng-class="{active:isSet(2)}"><a href ng-click="setTab(2)">Home 2</a></li>
+			<li ng-class="{active:isSet(3)}"><a href ng-click="setTab(3)">Home 3</a></li>
+			<li ng-class="{active:isSet(4)}"><a href ng-click="setTab(4)">Home 4</a></li>
+			<li ng-class="{active:isSet(5)}"><a href ng-click="setTab(5)">Home 5</a></li>
+		</ul>
+		
+		<div class="panel panel-default panel-result">
+			<div class="panel-body">
+				<div ng-show="isSet(1)">
+					<table id="users_dataTable_search" datatable="ng" dt-options="dtOptions"
+						dt-column-defs="dtColumnDefs" class="display table table-striped table-bordered row-border hover">
+						<thead>
+							<tr>
+								<th></th>
+								<th>Nome</th>
+								<th ng-show="hasRole('admin')">Senha</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr class="noselect" ng-repeat="user in users" ng-dblclick="toggleModal()" style="cursor: pointer;">
+								<td><input type="radio" ng-checked="selectedUser.id === user.id"></td>
+								<td>{{ user.name }}</td>
+								<td>{{ user.password }}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<!-- fieldset collapse start -->
+					<div class="cold-md-12">
+						<fieldset class="fsStyle">
+							<legend class="legendStyle">
+								<p data-toggle="collapse" data-target="#screens">Telas Permitidas</p>
+							</legend>
+							<div class="row collapse in" id="screens">
+								<div class="form-group">
+									<div class="col-md-12">
+										<picklist name="pktest" size="15" data-picklist="" data-pick-model="tselected" data-pick-options="v.name for v in toptions"/>
+									</div>
+								</div>
+							</div>
+						</fieldset>
+					</div>
 			</div>
+			<div class="col-md-6">
+				<div>
+					<p>ng-options:v.name for v in toptions</p>
+					<ul>
+						<li data-ng-repeat="s in tselected">{{s.value}}</li>
+					</ul>
+				</div>
+			</div>
+			
+			<div ng-include src="'partials/masterdata/userModal.xhtml'"></div>
 		</div>
 	</div>
+	
+	<!-- USERS MODAL -->
+	
+	<!-- END USERS MODAL -->
 </div>
-
 <hr />

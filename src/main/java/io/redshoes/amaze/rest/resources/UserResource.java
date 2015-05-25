@@ -12,6 +12,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 
 import io.redshoes.amaze.dao.user.UserDao;
+import io.redshoes.amaze.entity.User;
 import io.redshoes.amaze.rest.TokenUtils;
 import io.redshoes.amaze.transfer.TokenTransfer;
 import io.redshoes.amaze.transfer.UserTransfer;
@@ -30,7 +31,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Path("/user")
-public class UserResource
+public class UserResource extends GenericResource<User>
 {
 
 	@Autowired

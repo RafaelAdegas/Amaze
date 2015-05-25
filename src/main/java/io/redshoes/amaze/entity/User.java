@@ -41,6 +41,8 @@ public class User implements Entity, UserDetails
 	@ElementCollection(fetch = FetchType.EAGER)
 	private Set<String> roles = new HashSet<String>();
 
+	@ElementCollection(fetch = FetchType.EAGER)
+	private Set<String> pages = new HashSet<String>();
 
 	protected User()
 	{
@@ -94,6 +96,23 @@ public class User implements Entity, UserDetails
 	public void addRole(String role)
 	{
 		this.roles.add(role);
+	}
+	
+	public Set<String> getPages()
+	{
+		return this.pages;
+	}
+
+
+	public void setPages(Set<String> pages)
+	{
+		this.pages = pages;
+	}
+
+
+	public void addPage(String page)
+	{
+		this.pages.add(page);
 	}
 
 

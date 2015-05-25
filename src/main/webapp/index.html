@@ -32,11 +32,11 @@
 
 			<div class="collapse navbar-collapse">
 				<ul class="nav navbar-nav">
-					<li><a id="HOME_MENU_HEADER" href="#!/">Início</a></li>
-					<li><a id="BEACONS_MENU_HEADER" href="#!/beacons">Beacons</a></li>
-					<li><a id="CUSTOMERS_MENU_HEADER" href="#!/customers">Clientes</a></li>
-					<li><a id="ESTABLISHMENT_MENU_HEADER" href="#!/establishment">Estabelecimento</a></li>
-					<li><a id="MASTERDATA_MENU_HEADER" href="#!/masterdata">Configurações</a></li>
+					<li ng-show="hasPageAccess('HOME_MENU_HEADER')"><a id="HOME_MENU_HEADER" href="#!/">Início</a></li>
+					<li ng-show="hasPageAccess('BEACONS_MENU_HEADER')"><a id="BEACONS_MENU_HEADER" href="#!/beacons">Beacons</a></li>
+					<li ng-show="hasPageAccess('CUSTOMERS_MENU_HEADER')"><a id="CUSTOMERS_MENU_HEADER" href="#!/customers">Clientes</a></li>
+					<li ng-show="hasPageAccess('ESTABLISHMENT_MENU_HEADER')"><a id="ESTABLISHMENT_MENU_HEADER" href="#!/establishment">Estabelecimento</a></li>
+					<li ng-show="hasPageAccess('MASTERDATA_MENU_HEADER')"><a id="MASTERDATA_MENU_HEADER" href="#!/masterdata">Configurações</a></li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
 					<li class="dropdown" ng-show="user">
@@ -75,7 +75,9 @@
 	
 	<script src="datatable-js/jquery.dataTables.js"></script>
 	<script src="datatable-js/angular-datatables.min.js"></script>
+	
 	<script src="js-cropper/ng-img-crop.js"></script>
+	<script src="js-picklist/picklist.js"></script>
 	
 	<script src="partials/beacons/beaconCtrl.js"></script>
 	<script src="partials/masterdata/masterDataCtrl.js"></script>

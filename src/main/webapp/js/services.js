@@ -39,6 +39,11 @@ services.factory('UsersService', function($resource) {
 	return $resource('rest/users/:id', {id: '@id'});
 });
 
+services.factory('AccessService', function($resource) {
+	
+	return $resource('rest/users/getaccess/');
+});
+
 services.factory('CustomerService', function($resource) {
 	
 	return $resource('rest/customers/:id', {id: '@id'});
